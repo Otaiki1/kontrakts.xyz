@@ -1,10 +1,12 @@
 // import ContractCard from "../ui/ContractCard";
 
+import WhatToDo from "./WhatToDo";
+
 function DashboardPage() {
   return (
  
-    <div className="flex justify-start items-center font-bold text-3xl text-primary">
-      Hello and Welcome 
+    <div className="flex justify-center items-center font-bold text-3xl text-primary mt-10">
+     <WhatToDo />
     </div>
       
   );
