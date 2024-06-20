@@ -6,13 +6,13 @@ import { BlockchainContext } from "../context/BlockchainContext";
 import { NavLink } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
-const ContractModal = ({ contract }) => {
+const ContractModal = ({ contract, agreementId, signer }) => {
   const [rAddress, setRAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [processDone, setProcessDone] = useState(false);
 
    
-  const{address, createAgreement}  = useContext(BlockchainContext)
+  const{address, createAgreement, signAgreement}  = useContext(BlockchainContext)
 
   const [contractContent, setContractContent] = useState([]);
 
@@ -69,6 +69,46 @@ const ContractModal = ({ contract }) => {
       });
     }
   };
+
+  const partySign  = async(_agreementId) => {
+    if(rAddress) return;
+     try {
+      console.log("init sign message");
+     
+      setIsLoading(true);
+
+        if (address) {
+          const tx = await signAgreement(_agreementId);
+          console.log("TXNNN STATTUSS-------", tx);
+          setIsLoading(false);
+          Swal.fire({
+            title: "Good job!",
+            text: "You have successfully signed your agreement",
+            icon: "success",
+          });
+          setProcessDone(true);
+        }
+      
+      }
+     catch (err) {
+      setIsLoading(false);
+      console.log("ERROR IS ____", err);
+      Swal.fire({
+        title: "Error",
+        text: "Your process failed, agreement could not be signed ",
+        icon: "error",
+      });
+    }
+    
+  }
+
+  const sign = async() => {
+    if(signer){
+      await partySign(agreementId)
+    }else{
+      await signMessage()
+    }
+  }
 // Helper function to format contract text
 const formatContractText = (text) => {
   // Use regex to bold text before the colon and retain the colon
@@ -94,7 +134,7 @@ const formatContractText = (text) => {
         {contractContent.map((paragraph, index) => (
             <p key={index} className="mb-4">{paragraph}</p>
           ))}
-        <div className="flex flex-col gap-y-2">
+       {!signer && <div className="flex flex-col gap-y-2">
           <label>Receiving Party Address</label>
           <input
             type="text"
@@ -104,10 +144,10 @@ const formatContractText = (text) => {
             className="placeholder-text-300 rounded-full"
             placeholder="0x......."
           />
-        </div>
+        </div>}
         <button
           className="w-full rounded-full bg-[#0D47A1] p-2 text-white"
-          onClick={signMessage}
+          onClick={sign}
         >
           Sign
         </button>
