@@ -2,8 +2,12 @@
 import AddressContainer from "./AddressContainer";
 import Logo from "./Logo";
 import placeholder from "../assets/placeholder.png";
+import BtnSmall from "./BtnSmall";
+import { useContext } from "react";
+import { BlockchainContext } from "../context/BlockchainContext";
 
 function AuthNav() {
+  const {address, connectWallet} = useContext(BlockchainContext)
   return (
     <nav
       className="col-span-full flex w-full items-center justify-between bg-white py-7 pl-[34px] pr-[27px] shadow-secondaryShadow"
@@ -11,8 +15,12 @@ function AuthNav() {
     >
       <Logo />
       <div className="flex items-center">
-        <AddressContainer address="0x129091d855B4754bAB8FAd6345d9B32795639d35" />
+        {address && 
+        <><AddressContainer address={address}/>
         <img src={placeholder} className="ml-6" alt="" />
+        </>
+        }
+        {!address &&  <BtnSmall onClick={connectWallet}>Connect Wallet</BtnSmall>}
       </div>
     </nav>
   );
