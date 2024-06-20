@@ -1,19 +1,18 @@
-import { useState } from "react";
+
 import BtnWide from "../ui/BtnWide";
-import ConnectModal from "../ui/ConnectModal";
 import HomeNav from "../ui/HomeNav";
 import BtnSmall from "../ui/BtnSmall";
+import { useContext } from "react";
+import { BlockchainContext } from "../context/BlockchainContext.jsx";
 
 function LandingPage() {
-  const [showConnectWalletModal, setShowConnectWalletModal] = useState(false);
-  function toggleModal() {
-    setShowConnectWalletModal((show) => !show);
-  }
+ 
+  const{connectWallet}  = useContext(BlockchainContext)
+
   return (
     <div className="relative h-[100vh] overflow-y-hidden">
-      {showConnectWalletModal && <ConnectModal toggleModal={toggleModal} />}
       <HomeNav>
-        <BtnSmall onClick={toggleModal}>Connect Wallet</BtnSmall>
+        <BtnSmall onClick={connectWallet}>Connect Wallet</BtnSmall>
       </HomeNav>
       <main className="heroImg h-[929px] pt-[167px] text-center text-white">
         <h1 className="mb-[27px] text-[90px] font-bold leading-[84px]">
@@ -24,7 +23,7 @@ function LandingPage() {
           Where your agreements stay private, and their existence is
           indisputable
         </p>
-        <BtnWide onClick={toggleModal}>Get Started</BtnWide>
+        <BtnWide >Get Started</BtnWide>
       </main>
     </div>
   );
