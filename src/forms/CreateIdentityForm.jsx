@@ -163,6 +163,7 @@ import TransgateConnect from "@zkpass/transgate-js-sdk";
 import Swal from "sweetalert2";
 import Web3 from "web3";
 import { Spinner } from "../ui";
+import check from "../assets/9135401.png";
 // import { ethers } from "ethers";
 
 function CreateIdentityForm() {
@@ -170,8 +171,8 @@ function CreateIdentityForm() {
   const [verified, setVerified] = useState(false);
   const [verifying, setVerifying] = useState(false);
 
-  const schemaId = "0355c834f6b94ccbaef8d84c859861c5";
-  const appId = "b5ad25fa-e2a6-4d24-8619-17150ecd85e7";
+  const schemaId = '98be81c858824ae98b64df38988669cd';
+  const appId = '58ce1d6b-653f-4ca9-bf7f-9a704db0c8d6';
 
 
 function verifyEVMMessageSignature(
@@ -265,7 +266,7 @@ function verifyEVMMessageSignature(
   return (
     <form
       action=""
-      className="bg-secondaryColor shadow-primaryShadow flex w-[508px] flex-col rounded-[5px] px-[35px] pb-[50px] pt-[17px] text-black"
+      className="bg-secondaryColor shadow-lg flex w-[508px] flex-col rounded-[5px] px-[35px] pb-[50px] pt-[17px] text-black"
     >
       {!verifying && (
         <>
@@ -276,6 +277,8 @@ function verifyEVMMessageSignature(
             <h1 className="text-2xl">
               User should be at least level 2 KYC on Binance
             </h1>
+            {verified && <img src={check} />}
+            {!verified &&<KYCLevel2Details />}
           </div>
         </>
       )}
@@ -300,5 +303,27 @@ function verifyEVMMessageSignature(
     </form>
   );
 }
+
+const KYCLevel2Details = () => {
+  const kycDetails = [
+    "Provide comprehensive information and documents for verification",
+    "Submit a valid government-issued photo ID",
+    "Acceptable IDs include passport or driver's license",
+  ];
+
+  return (
+    <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Binance KYC Level 2 - Intermediate Verification Usually entails </h2>
+      <ul className="list-disc list-inside text-gray-700">
+        {kycDetails.map((detail, index) => (
+          <li key={index} className="mb-2 hover:bg-gray-100 p-2 rounded">
+            {detail}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 
 export default CreateIdentityForm;

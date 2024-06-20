@@ -1,12 +1,12 @@
 import { createContext, useState } from "react";
 import PropTypes from "prop-types";
-// import { ethers } from "ethers";
-// import abi from "../utils/Custody.abi.json";
+import { ethers } from "ethers";
+import abi from "../utils/Agreement.abi.json";
 
 export const BlockchainContext = createContext();
 
 export const BlockchainContextProvider = ({ children }) => {
-//   const CONTRACT_ADDRESS = "0x4402102dD08C42C09AB3A8e9F57DFace138602e9";
+ const CONTRACT_ADDRESS = "0x271C7936f116F71B9B670322C5574171C44A284E";
   const [address, setAddress] = useState(null);
 
   const connectWallet = async () => {
@@ -39,20 +39,7 @@ export const BlockchainContextProvider = ({ children }) => {
   };
 
 
-  // A function that takes a solidity output as a string and returns a readable time as a string
-  function convertToReadableTime(solidityOutput) {
-    // Convert the BigNumber object to a number
-    const seconds = Number(solidityOutput);
 
-    // Create a Date object from the number
-    const date = new Date(seconds * 1000); // multiply by 1000 to get milliseconds
-
-    // Format the Date object as a readable string
-    const readableTime = date.toLocaleString(); // use your preferred options
-
-    // Return the readable time
-    return readableTime;
-  }
 
   const createAgreement = async (party2Address, tokenURI) => {
     try {
@@ -196,6 +183,14 @@ export const BlockchainContextProvider = ({ children }) => {
   const contextValue = {
     address,
     connectWallet,
+    createAgreement,
+    signAgreement,
+    mintAgreement,
+    deleteAgreement,
+    getOwnerCases,
+    getAgreementDetails,
+    getParty1Agreements,
+    getParty2Agreements,
   };
 
   return (

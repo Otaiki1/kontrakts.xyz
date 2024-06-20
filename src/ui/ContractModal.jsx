@@ -1,22 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { NFTStorage } from "nft.storage";
-import { ethers } from "ethers";
 import Spinner from "./Spinner";
-// import AgreementABI from "../utils/AgreementAbi.json";
 import Swal from "sweetalert2";
-// import { utils } from "ethers";
+import { BlockchainContext } from "../context/BlockchainContext";
+import { NavLink } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
 const ContractModal = ({ contract }) => {
   const [rAddress, setRAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [processDone, setProcessDone] = useState(false);
+
+   
+  const{address, createAgreement}  = useContext(BlockchainContext)
 
   const [contractContent, setContractContent] = useState([]);
 
   // Paste your NFT.Storage API key into the quotes:
   const NFT_STORAGE_KEY =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEVmOENlMGE2OTEyREMxNkYwZDI5NmM2YjE4MzE1ZDBhMzg5ZTJjZEUiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTcwMDE4MjI1MjIyOCwibmFtZSI6IlByaXZ5UHJvb2YifQ.3I5Ga-LpkJnvmWAAv-jnq8rpEOjYPCw1l_aYySm7vs8";
-  const CONTRACT_ADDRESS = "0x9C8AAfAAC33718c9CdD478F11F9Ed37c4Fc436c8";
+
 
   function storeNFT(userAddress) {
     // create a new NFTStorage client using our API key
@@ -41,52 +44,8 @@ const ContractModal = ({ contract }) => {
       const ipfsHash = result.ipnft;
       console.log("IPFS HASHH IS )____,", ipfsHash);
       if (ipfsHash) {
-        if (window.ethereum) {
-          console.log("eth found yeah");
-          const account = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          console.log("account is ", account);
-
-          let accounts = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
-
-          // The current selected account out of the connected accounts.
-          let userAddress = accounts[0];
-
-          let iface = new ethers.utils.Interface([
-            "function createAgreement(address _party2, string memory _tokenUri)",
-          ]);
-
-          let calldata = iface.encodeFunctionData("createAgreement", [
-            userAddress,
-            ipfsHash,
-          ]);
-
-          // Send transaction to the injected wallet to be confirmed by the user.
-          let tx = await window.ethereum.request({
-            method: "eth_sendTransaction",
-            params: [
-              {
-                from: userAddress,
-                to: CONTRACT_ADDRESS,
-                data: calldata, // Information about which function to call and what values to pass as parameters
-              },
-            ],
-          });
-          //   console.log("REQUESTING FOR PROVIDER");
-          //   const provider = ethers.providers.Web3Provider(window.ethereum);
-          //   const signer = provider.getSigner();
-          //   const contract = new ethers.Contract(
-          //     CONTRACT_ADDRESS,
-          //     AgreementABI,
-          //     signer,
-          //   );
-
-          //   let tx = await contract.createAgreement(rAddress, ipfsHash);
-          //   await tx.wait();
-          alert("success");
+        if (address) {
+          const tx = await createAgreement(rAddress, ipfsHash);
           console.log("TXNNN STATTUSS-------", tx);
           setIsLoading(false);
           Swal.fire({
@@ -94,9 +53,10 @@ const ContractModal = ({ contract }) => {
             text: "You have successfully created and signed your agreement",
             icon: "success",
           });
+          setProcessDone(true);
         }
       } else {
-        alert("No IPFS HASH");
+        console.log("No IPFS HASH");
         setIsLoading(false);
       }
     } catch (err) {
@@ -130,7 +90,7 @@ const formatContractText = (text) => {
   return (
     <div className="fixed inset-0 h-screen w-full overflow-y-auto bg-slate-900 bg-opacity-50 p-3">
       <div className="mx-auto my-auto  flex flex-col gap-y-4 rounded-lg bg-white p-5 shadow-lg">
-        <h4 className="text-center font-bold">Contract Preview</h4>
+       {!processDone && <> <h4 className="text-center font-bold">Contract Preview</h4>
         {contractContent.map((paragraph, index) => (
             <p key={index} className="mb-4">{paragraph}</p>
           ))}
@@ -151,6 +111,14 @@ const formatContractText = (text) => {
         >
           Sign
         </button>
+        </>}
+        {processDone && 
+        <NavLink
+          to="/app"
+          className="bg-primaryColor leading-default flex items-center justify-center self-center rounded-full px-[61px] py-[11.5px] text-center text-base font-semibold"
+        >
+          Go Back
+        </NavLink>}
       </div>
       {isLoading && <Spinner message="Signing Contract..." />}
     </div>

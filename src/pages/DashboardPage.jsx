@@ -3,8 +3,8 @@
 function DashboardPage() {
   return (
  
-    <div className="flex justify-center items-center">
-      Hello World
+    <div className="flex justify-start items-center font-bold text-3xl text-primary">
+      Hello and Welcome 
     </div>
       
   );
