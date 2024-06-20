@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^3.10.5",
     "@zkpass/transgate-js-sdk": "^0.2.0",
     "axios": "^1.7.2",
     "ethers": "^6.13.1",
+    "graphql": "^16.8.2",
     "nft.storage": "^7.1.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

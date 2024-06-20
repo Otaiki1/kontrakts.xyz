@@ -8,6 +8,8 @@ import WhatToDo from "./pages/WhatToDo";
 import CreateContract from "./pages/CreateContract";
 import ContractDraft from "./pages/ContractDraft";
 import ContractPreview from "./pages/ContractPreview";
+import ContractPage from "./pages/ContractPage";
+
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
           <Route path="contract-draft" element={<ContractDraft />} />
           <Route path="contract-preview" element={<ContractPreview />} />
           <Route path="create-contract" element={<CreateContract />} />
+          <Route path="contracts-page" element={<ContractPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
